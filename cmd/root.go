@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	f "expanse-cli/functions"
+	f "exp/functions"
 
 	"github.com/spf13/viper"
 )
@@ -33,7 +33,7 @@ var fm f.FunctionManager
 var rootCmd = &cobra.Command{
 	Use:   "exp",
 	Short: "a cli tool for the expanse table-top rpg",
-	Long:  `a hopefully helpful "exp"erience`,
+	Long:  `a hopefully helpful "experience`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

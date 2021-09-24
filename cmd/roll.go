@@ -16,33 +16,29 @@ limitations under the License.
 package cmd
 
 import (
-	"expanse-cli/functions"
 	"fmt"
+
+	"exp/utils"
 
 	"github.com/spf13/cobra"
 )
 
-// charCmd represents the char command
-var charCmd = &cobra.Command{
-	Use:   "char",
-	Short: "character related actions",
-	Long:  `generates, loads, updates, and rolls for a character`,
+// rollCmd represents the roll command
+var rollCmd = &cobra.Command{
+	Use:   "roll",
+	Short: "simple dice roller",
+	Long:  `rolls a dice for you based on --s[ize] and --a[mount] flags`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.ParseFlags(args)
-		action, _ := cmd.Flags().GetString("action")
-
-		fmt.Printf("action:%s\n", action)
-		switch action {
-		case "gen":
-			functions.GenerateCharacter(cmd, args)
-		default:
-			fmt.Println("unknown character action.")
+		sides, _ := cmd.Flags().GetInt("d")
+		amount, _ := cmd.Flags().GetInt("a")
+		for _, result := range utils.Roll(sides, amount) {
+			fmt.Printf("1d%v: %v\n", sides, result)
 		}
 	},
 }
 
 func init() {
-	charCmd.PersistentFlags().String("action", "", "character action to route to")
-	charCmd.PersistentFlags().String("name", "", "character name")
-	rootCmd.AddCommand(charCmd)
+	rollCmd.Flags().Int("d", 6, "dice size")
+	rollCmd.Flags().Int("a", 1, "amount to roll")
+	rootCmd.AddCommand(rollCmd)
 }

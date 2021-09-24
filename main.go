@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "expanse-cli/cmd"
+import "exp/cmd"
 
 func main() {
 	cmd.Execute()
