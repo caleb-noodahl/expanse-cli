@@ -220,6 +220,7 @@ const (
 	Faith
 	SelfDiscipline
 	History
+	Theology
 )
 
 const (
@@ -599,6 +600,8 @@ func (f Focus) String() string {
 		return "faith"
 	case SelfDiscipline:
 		return "self_discipline"
+	case Theology:
+		return "theology"
 	}
 	return ""
 }
@@ -736,6 +739,86 @@ func (a Ability) Focus() []Focus {
 		return []Focus{Courage, Faith, SelfDiscipline}
 	}
 	return []Focus{}
+}
+func (p Profession) BenifitDefinitions() BenifitDefinition {
+	switch p {
+	case Artist:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Expression, Art},
+			TalentPool: []Talent{Artistry, Performance},
+		}
+	case Athlete:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Running, Swimming, Acrobatics, FreeFall, Climbing, Jumping},
+			TalentPool: []Talent{Agility, QuickReflexes},
+		}
+	case Brawler:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Brawling, Grappling},
+			TalentPool: []Talent{GrapplingStyle, StrikingStyle},
+		}
+	case Clergy:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Faith, Theology},
+			TalentPool: []Talent{Inspire, Oratory},
+		}
+	case Commander:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Leadership, Tactics},
+			TalentPool: []Talent{Command, TacticalAwareness},
+		}
+	case Criminal:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Deception, SleightOfHand, Stealth},
+			TalentPool: []Talent{Burglary, Scouting},
+		}
+	case Dilettante:
+		return BenifitDefinition{
+			FocusPool:  Perception.Focus(),
+			TalentPool: []Talent{Improvisation, KnowItAll},
+		}
+	case Executive:
+		return BenifitDefinition{
+			FocusPool:  []Focus{Leadership, Business},
+			TalentPool: []Talent{Command, Intrigue},
+		}
+	case Expert:
+		return BenifitDefinition{
+			FocusPool:  Intelligence.Focus(),
+			TalentPool: []Talent{Expertise, KnowItAll},
+		}
+	case Explorer:
+		return BenifitDefinition{}
+	case Fixer:
+		return BenifitDefinition{}
+	case Investigator:
+		return BenifitDefinition{}
+	case Merchant:
+		return BenifitDefinition{}
+	case Negotiator:
+		return BenifitDefinition{}
+	case Pilot:
+		return BenifitDefinition{}
+	case Politician:
+		return BenifitDefinition{}
+	case Professional:
+		return BenifitDefinition{}
+	case Scavenger:
+		return BenifitDefinition{}
+	case Scholar:
+		return BenifitDefinition{}
+	case Security:
+		return BenifitDefinition{}
+	case Socialite:
+		return BenifitDefinition{}
+	case Soldier:
+		return BenifitDefinition{}
+	case Survivalist:
+		return BenifitDefinition{}
+	case Technician:
+		return BenifitDefinition{}
+	}
+	return BenifitDefinition{}
 }
 
 func (b Background) BenifitDefinitions() BenifitDefinition {
