@@ -58,7 +58,7 @@ func (c Character) CLIOutput() string {
 	outbuf.WriteString("\nsecondary abilities:\n")
 	outbuf.WriteString(fmt.Sprintf("-defense:   %v\n", 10+AbilityScoreModifier(c.Abilities[Dexterity])))
 	outbuf.WriteString(fmt.Sprintf("-speed:     %v\n", 10+AbilityScoreModifier(c.Abilities[Dexterity])))
-	outbuf.WriteString(fmt.Sprintf("-toughness: %v\n", 10+AbilityScoreModifier(c.Abilities[Constitution])))
+	outbuf.WriteString(fmt.Sprintf("-toughness: %v\n", AbilityScoreModifier(c.Abilities[Constitution])))
 	outbuf.WriteString("\nfortune:\n")
 	outbuf.WriteString(fmt.Sprintf("value: %v\n", c.Fortune))
 
@@ -118,6 +118,34 @@ func (c *Character) LoadCharacter(cmd *cobra.Command, args []string) {
 
 func pointBuyPrompt(cmd *cobra.Command, args []string) map[Ability]int {
 	out := map[Ability]int{}
+	var input string
+	total := 12
+	for i := 0; i <= 8; i++ {
+		if total == 0 {
+			continue
+		}
+		fmt.Printf("points remaining: %v\n", total)
+		fmt.Printf("spend how many on %s?(0 - 3)\n", Ability(i))
+		fmt.Scan(&input)
+		parsed, _ := strconv.Atoi(input)
+		abilityScoreValue := 0
+		switch parsed {
+		case 0:
+			abilityScoreValue = 8
+		case 1:
+			abilityScoreValue = 11
+		case 2:
+			abilityScoreValue = 14
+		case 3:
+			abilityScoreValue = 17
+		}
+		out[Ability(i)] = abilityScoreValue
+		total = total - parsed
+	}
+	if total != 0 {
+
+	}
+	fmt.Printf("abilities:%+v\n", out)
 	return out
 }
 
@@ -148,7 +176,9 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 		parsed    int
 		err       error
 	)
-	c = &Character{}
+	c = &Character{
+		Fortune: 15,
+	}
 	fmt.Printf("beginning character wizard\n")
 	fmt.Printf("\nstep #1: origin\n")
 	fmt.Printf("[%v]:%s, [%v]:%s, [%v]:%s\n", 0, Origin(0).String(), 1, Origin(1).String(), 2, Origin(2).String())
@@ -168,7 +198,7 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 		c.Abilities = rollAssignPrompt(cmd, args)
 	}
 
-	fmt.Print("\nstep #2: background\n")
+	fmt.Print("\nstep #3: background\n")
 	for i := 0; i <= 11; i++ {
 		fmt.Printf("[%v]: %s\n", i, Background(i))
 	}
@@ -200,8 +230,24 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	fmt.Scan(&selection)
 	parsed, _ = strconv.Atoi(selection)
 	c.Profession = Profession(parsed)
-	fmt.Printf("socal class (derived from profession): %s\n", c.Profession.SocialClass())
+	c.SocialClass = c.Profession.SocialClass()
+	fmt.Printf("socal class (derived from profession): %s\n", c.Profession.SocialClass().String())
 
+	fmt.Printf("\nstep #6: drive\n")
+	for i := 0; i <= 11; i++ {
+		fmt.Printf("[%v]: %s\n", i, Drive(i).String())
+	}
+	fmt.Scan(&selection)
+	parsed, _ = strconv.Atoi(selection)
+	c.Drive = Drive(parsed)
+
+	fmt.Printf("\nstep #7: drive talent\n")
+	for i, talent := range c.Drive.Talents() {
+		fmt.Printf("[%v]: %s\n", i, talent.String())
+	}
+	fmt.Scan(&selection)
+	parsed, _ = strconv.Atoi(selection)
+	c.Talents = append(c.Talents, c.Drive.Talents()[parsed])
 	fmt.Printf("\n\ncharacter: %+v\n", c.CLIOutput())
 
 }

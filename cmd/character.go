@@ -47,13 +47,13 @@ var charCmd = &cobra.Command{
 		case "note":
 			character.AddCharacterNote(cmd, args)
 		default:
-			fmt.Println("unknown character command.")
+			fmt.Println("unknown action")
 		}
 	},
 }
 
 func init() {
-	charCmd.Flags().String("a", "", "action to route to")
+	charCmd.Flags().String("a", "", "action to route to:\n --a=gen\n --a=wiz\n --a=load\n --a=update\n --a=note")
 	charCmd.Flags().String("n", "", "name of character")
 	rootCmd.AddCommand(charCmd)
 }

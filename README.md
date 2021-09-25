@@ -1,5 +1,7 @@
 # expanse-cli
 
+_cli dungemaster's toolbox for the expanse tabletop rpg_
+
 ## instructions
 
 clone the repo
@@ -15,7 +17,10 @@ cd expanse-cli
 go build
 
 # have fun!
-exp.exe char --a=gen
+> exp.exe roll        
+1d6: 4
+
+> exp.exe char --a=gen
 
 generating new character:
 
