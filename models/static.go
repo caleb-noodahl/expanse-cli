@@ -9,6 +9,7 @@ type Focus int
 type Talent int
 type Specialization int
 type Drive int
+type Condition int
 
 const (
 	Earther Origin = iota
@@ -21,6 +22,22 @@ const (
 	LowerClass
 	MiddleClass
 	UppderClass
+)
+
+const (
+	Blinded Condition = iota
+	Deafened
+	Dying
+	Exhausted
+	Fatigued
+	FreeFalling
+	Helpless
+	Hindered
+	Injured
+	Prone
+	Restrained
+	Unconcious
+	Wounded
 )
 
 const (
@@ -62,7 +79,7 @@ const (
 	Doctor
 	DualWeaponStyle
 	Fringer
-	ExpertiseFocus
+	Expertise
 	GrapplingStyle
 	Hacking
 	Improvisation
@@ -91,6 +108,7 @@ const (
 	ThrownWeaponStyle
 	TwoHandedStyle
 	StrikingStyle
+	Fortune
 )
 
 const (
@@ -204,6 +222,128 @@ const (
 	History
 )
 
+const (
+	BuilderDrive Drive = iota
+	CaregiverDrive
+	EcstaticDrive
+	JudgeDrive
+	LeaderDrive
+	NetworkerDrive
+	PenitentDrive
+	ProtectorDrive
+	RebelDrive
+	SurvivorDrive
+	VisionaryDrive
+	FortuneDrive
+)
+
+func (c Condition) String() string {
+	switch c {
+	case Blinded:
+		return "blinded"
+	case Deafened:
+		return "deafened"
+	case Dying:
+		return "dying"
+	case Exhausted:
+		return "exhausted"
+	case Fatigued:
+		return "fatigued"
+	case FreeFalling:
+		return "free_falling"
+	case Helpless:
+		return "helpless"
+	case Hindered:
+		return "hindered"
+	case Injured:
+		return "injured"
+	case Prone:
+		return "prone"
+	case Restrained:
+		return "restrained"
+	case Unconcious:
+		return "unconcious"
+	case Wounded:
+		return "wounded"
+	}
+	return ""
+}
+
+func (d Drive) String() string {
+	switch d {
+	case BuilderDrive:
+		return "builder"
+	case CaregiverDrive:
+		return "caregiver"
+	case EcstaticDrive:
+		return "ecstatic"
+	case JudgeDrive:
+		return "judge"
+	case LeaderDrive:
+		return "leader"
+	case NetworkerDrive:
+		return "networker"
+	case PenitentDrive:
+		return "penitent"
+	case ProtectorDrive:
+		return "protector"
+	case RebelDrive:
+		return "rebel"
+	case SurvivorDrive:
+		return "survivor"
+	case VisionaryDrive:
+		return "visionary"
+	case FortuneDrive:
+		return "fortune"
+	}
+	return ""
+}
+
+func (d Drive) Talents() []Talent {
+	switch d {
+	case BuilderDrive:
+		return []Talent{Maker, Oratory}
+	case CaregiverDrive:
+		return []Talent{Inspire, Medic}
+	case EcstaticDrive:
+		return []Talent{Attractive, Carousing}
+	case JudgeDrive:
+		return []Talent{Knowledge, Observation}
+	case LeaderDrive:
+		return []Talent{Command, Inspire}
+	case NetworkerDrive:
+		return []Talent{Contacts, Intrigue}
+	case PenitentDrive:
+		return []Talent{Fringer, KnowItAll}
+	case ProtectorDrive:
+		return []Talent{Misdirection, Protector}
+	case RebelDrive:
+		return []Talent{Expertise, Improvisation}
+	case SurvivorDrive:
+		return []Talent{Fringer, TacticalAwareness}
+	case VisionaryDrive:
+		return []Talent{Artistry, Oratory, Performance}
+	case FortuneDrive:
+		return []Talent{Fortune}
+
+	}
+	return []Talent{}
+}
+
+func (s SocialClass) IncomeScore() int {
+	switch s {
+	case Outsider:
+		return 0
+	case LowerClass:
+		return 2
+	case MiddleClass:
+		return 4
+	case UppderClass:
+		return 6
+	}
+	return 0
+}
+
 type BenifitDefinition struct {
 	Background      Background `json:"background"`
 	Ability         Ability    `json:"ability"`
@@ -218,30 +358,119 @@ type Benifit struct {
 	Talent Talent `json:"talent"`
 }
 
-func AbilityScoreModifier(roll int) int {
-	if roll <= 3 {
+func AbilityScoreModifier(val int) int {
+	if val <= 3 {
 		return -2
 	}
-	if roll/3 <= 2 {
+	if val >= 4 && val <= 5 {
+		return -1
+	}
+	if val >= 6 && val <= 8 {
 		return 0
 	}
-	if roll/3 <= 3 {
+	if val >= 9 && val <= 11 {
 		return 1
 	}
-	if roll/4 <= 4 {
+	if val >= 12 && val <= 14 {
 		return 2
 	}
-	if roll/5 <= 5 {
+	if val >= 15 && val <= 17 {
 		return 3
 	}
-	if roll/6 <= 6 {
+	if val >= 18 {
 		return 4
 	}
 	return 0
 }
 
-func (t Focus) String() string {
+func (t Talent) String() string {
 	switch t {
+	case Affluent:
+		return "affluent"
+	case Agility:
+		return "agility"
+	case Artistry:
+		return "artistry"
+	case Attractive:
+		return "attractive"
+	case Burglary:
+		return "burglary"
+	case Carousing:
+		return "carousing"
+	case Command:
+		return "command"
+	case Contacts:
+		return "contacts"
+	case Doctor:
+		return "doctor"
+	case DualWeaponStyle:
+		return "dual_weapon_style"
+	case Fringer:
+		return "fringer"
+	case Expertise:
+		return "expertise"
+	case GrapplingStyle:
+		return "grappling_style"
+	case Hacking:
+		return "hacking"
+	case Improvisation:
+		return "improvisation"
+	case Inspire:
+		return "inspire"
+	case Intrigue:
+		return "intrigue"
+	case KnowItAll:
+		return "know_it_all"
+	case Knowledge:
+		return "knowledge"
+	case Linguistics:
+		return "linguistics"
+	case Maker:
+		return "maker"
+	case Medic:
+		return "medic"
+	case Misdirection:
+		return "misdirection"
+	case Observation:
+		return "observation"
+	case Oratory:
+		return "oratory"
+	case OverwhelmStyle:
+		return "overwhelm_style"
+	case Performance:
+		return "performance"
+	case PilotTalent:
+		return "pilot"
+	case PinpointAccuracy:
+		return "pinpoint_accuracy"
+	case QuickReflexes:
+		return "quick_reflexes"
+	case PistolStyle:
+		return "pistol_style"
+	case RifleStyle:
+		return "rifle_style"
+	case Protector:
+		return "protector"
+	case Scouting:
+		return "scouting"
+	case SelfDefenseStyle:
+		return "self_defense_style"
+	case TacticalAwareness:
+		return "tactical_awareness"
+	case SingleWeaponStyle:
+		return "single_weapon_style"
+	case ThrownWeaponStyle:
+		return "thrown_weapon_style"
+	case TwoHandedStyle:
+		return "two_handed_style"
+	case StrikingStyle:
+		return "striking_style"
+	}
+	return ""
+}
+
+func (f Focus) String() string {
+	switch f {
 	case Bows:
 		return "bows"
 	case Gunnery:
@@ -553,10 +782,11 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 		}
 	case Exile:
 		return BenifitDefinition{
-			Background: Exile,
-			Ability:    Constitution,
-			FocusPool:  []Focus{Brawling, SelfDiscipline},
-			TalentPool: []Talent{Affluent, Fringer},
+			Background:      Exile,
+			Ability:         Constitution,
+			AbilityModifier: 1,
+			FocusPool:       []Focus{Brawling, SelfDiscipline},
+			TalentPool:      []Talent{Affluent, Fringer},
 		}
 	case Military:
 		return BenifitDefinition{

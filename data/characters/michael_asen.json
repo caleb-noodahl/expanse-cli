@@ -1,0 +1,26 @@
+{
+    "name": "michael_asen",
+    "level":1,
+    "origion":2,
+    "background":6,
+    "talents":[
+        19,
+        3
+    ],
+    "specializations":[],
+    "social_class":0,
+    "profession":0,
+    "drive":2,
+    "abilities":{
+        "0":16,
+        "1":3,
+        "2":3,
+        "3":14,
+        "4":9,
+        "5":7,
+        "6":14,
+        "7":3,
+        "8":10},
+        "fortune":15,
+        "conditions":[]
+    }

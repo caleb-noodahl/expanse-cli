@@ -38,6 +38,8 @@ var charCmd = &cobra.Command{
 		switch action {
 		case "gen":
 			character.GenerateCharacter(cmd, args)
+		case "wiz":
+			character.Wizard(cmd, args)
 		case "load":
 			character.LoadCharacter(cmd, args)
 		case "update":
