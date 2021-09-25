@@ -21,13 +21,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	f "exp/functions"
-
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
-var fm f.FunctionManager
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -48,7 +45,6 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	fm.Load()
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.exp.yaml)")
 
 	// Cobra also supports local flags, which will only run

@@ -16,7 +16,7 @@ limitations under the License.
 package cmd
 
 import (
-	"exp/functions"
+	"exp/models"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -29,20 +29,29 @@ var charCmd = &cobra.Command{
 	Long:  `generates, loads, updates, and rolls for a character`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.ParseFlags(args)
+		character := models.Character{}
 		action, _ := cmd.Flags().GetString("a")
+		name, _ := cmd.Flags().GetString("n")
+		if name == "" {
 
-		fmt.Printf("action:%s\n", action)
+		}
 		switch action {
 		case "gen":
-			functions.GenerateCharacter(cmd, args)
+			character.GenerateCharacter(cmd, args)
+		case "load":
+			character.LoadCharacter(cmd, args)
+		case "update":
+			character.UpdateCharacter(cmd, args)
+		case "note":
+			character.AddCharacterNote(cmd, args)
 		default:
-			fmt.Println("unknown character action.")
+			fmt.Println("unknown character command.")
 		}
 	},
 }
 
 func init() {
-	charCmd.Flags().String("a", "", "character action to route to")
-	charCmd.Flags().String("n", "", "character name")
+	charCmd.Flags().String("a", "", "action to route to")
+	charCmd.Flags().String("n", "", "name of character")
 	rootCmd.AddCommand(charCmd)
 }

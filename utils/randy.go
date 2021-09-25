@@ -13,3 +13,9 @@ func Roll(sides, amount int) []int {
 	}
 	return out
 }
+
+func Rand(max, lowest int) int {
+	out, _ := rand.Int(rand.Reader, big.NewInt(int64(max)-int64(lowest)))
+	out = big.NewInt(out.Int64() + int64(lowest))
+	return int(out.Int64())
+}
