@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"exp/utils"
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 type Character struct {
@@ -263,7 +265,17 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	parsed, _ = strconv.Atoi(selection)
 	c.Talents = append(c.Talents, c.Drive.Talents()[parsed])
 	fmt.Printf("\n\ncharacter: %+v\n", c.CLIOutput())
-
+	root := viper.GetString("data.root")
+	characters := viper.GetString("data.characters")
+	file, err := os.OpenFile(fmt.Sprintf("%s%s%s.json", root, characters, c.Name), os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		fmt.Printf("\nerror:%s\n", err)
+		return
+	}
+	defer file.Close()
+	raw, _ := c.JSON()
+	file.Write(raw)
+	fmt.Printf("\nwrote %v bytes to %s%s\n", len(raw), root, characters)
 }
 
 func (c *Character) UpdateCharacter(cmd *cobra.Command, args []string) {
