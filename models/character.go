@@ -39,7 +39,7 @@ func (c Character) CLIOutput() string {
 	outbuf.WriteString(fmt.Sprintf("social class: %s\n", c.SocialClass.String()))
 	outbuf.WriteString(fmt.Sprintf("profession:   %s\n", c.Profession.String()))
 	outbuf.WriteString(fmt.Sprintf("drive:        %s\n", c.Drive.String()))
-	outbuf.WriteString("talents:\n")
+	outbuf.WriteString("\ntalents:\n")
 	for _, talent := range c.Talents {
 		outbuf.WriteString(fmt.Sprintf("-%s\n", talent.String()))
 	}
@@ -51,9 +51,10 @@ func (c Character) CLIOutput() string {
 	for ability, val := range c.Abilities {
 		if ability == c.Background.BenifitDefinitions().Ability {
 			outbuf.WriteString(fmt.Sprintf("-%s: %v + 1 (%v) *%s\n", ability.String(), val, AbilityScoreModifier(val+1), c.Background.String()))
-			continue
+		} else {
+			outbuf.WriteString(fmt.Sprintf("-%s: %v (%v)\n", ability.String(), val, AbilityScoreModifier(val)))
 		}
-		outbuf.WriteString(fmt.Sprintf("-%s: %v (%v)\n", ability.String(), val, AbilityScoreModifier(val)))
+
 	}
 	outbuf.WriteString("\nsecondary abilities:\n")
 	outbuf.WriteString(fmt.Sprintf("-defense:   %v\n", 10+AbilityScoreModifier(c.Abilities[Dexterity])))
@@ -61,7 +62,6 @@ func (c Character) CLIOutput() string {
 	outbuf.WriteString(fmt.Sprintf("-toughness: %v\n", AbilityScoreModifier(c.Abilities[Constitution])))
 	outbuf.WriteString("\nfortune:\n")
 	outbuf.WriteString(fmt.Sprintf("value: %v\n", c.Fortune))
-
 	return outbuf.String()
 }
 
@@ -70,10 +70,15 @@ func (c *Character) GenerateCharacter(cmd *cobra.Command, args []string) {
 	fmt.Printf("generating new character:\n\n")
 	profession := Profession(utils.Rand(23, 0))
 	background := Background(utils.Rand(11, 0))
-	focus := background.BenifitDefinitions().FocusPool[utils.Rand(len(background.BenifitDefinitions().FocusPool), 0)]
+	focus := []Focus{
+		background.BenifitDefinitions().FocusPool[utils.Rand(len(background.BenifitDefinitions().FocusPool), 0)],
+		profession.BenifitDefinitions().FocusPool[utils.Rand(len(profession.BenifitDefinitions().FocusPool), 0)],
+	}
+
 	drive := Drive(utils.Rand(11, 0))
 	talents := []Talent{
 		background.BenifitDefinitions().TalentPool[utils.Rand(len(background.BenifitDefinitions().TalentPool), 0)],
+		profession.BenifitDefinitions().TalentPool[utils.Rand(len(profession.BenifitDefinitions().TalentPool), 0)],
 		drive.Talents()[utils.Rand(len(drive.Talents()), 0)],
 	}
 	fortune := 15
@@ -92,7 +97,7 @@ func (c *Character) GenerateCharacter(cmd *cobra.Command, args []string) {
 		Talents:         talents,
 		Conditions:      []Condition{},
 		Specializations: []Specialization{},
-		Focus:           []Focus{focus},
+		Focus:           focus,
 		Abilities: map[Ability]int{
 			Accuracy:      utils.Rand(18, 3),
 			Constitution:  utils.Rand(18, 3),
@@ -121,9 +126,6 @@ func pointBuyPrompt(cmd *cobra.Command, args []string) map[Ability]int {
 	var input string
 	total := 12
 	for i := 0; i <= 8; i++ {
-		if total == 0 {
-			continue
-		}
 		fmt.Printf("points remaining: %v\n", total)
 		fmt.Printf("spend how many on %s?(0 - 3)\n", Ability(i))
 		fmt.Scan(&input)
@@ -142,9 +144,7 @@ func pointBuyPrompt(cmd *cobra.Command, args []string) map[Ability]int {
 		out[Ability(i)] = abilityScoreValue
 		total = total - parsed
 	}
-	if total != 0 {
 
-	}
 	fmt.Printf("abilities:%+v\n", out)
 	return out
 }
@@ -232,8 +232,22 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	c.Profession = Profession(parsed)
 	c.SocialClass = c.Profession.SocialClass()
 	fmt.Printf("socal class (derived from profession): %s\n", c.Profession.SocialClass().String())
+	fmt.Print("\nstep #6: profession focus\n")
+	for i, focus := range c.Profession.BenifitDefinitions().FocusPool {
+		fmt.Printf("[%v]: %s\n", i, focus.String())
+	}
+	fmt.Scan(&selection)
+	parsed, _ = strconv.Atoi(selection)
+	c.Focus = append(c.Focus, c.Profession.BenifitDefinitions().FocusPool[parsed])
+	fmt.Printf("\nstep #7: profession talent\n")
+	for i, talent := range c.Profession.BenifitDefinitions().TalentPool {
+		fmt.Printf("[%v]: %s\n", i, talent.String())
+	}
+	fmt.Scan(&selection)
+	parsed, _ = strconv.Atoi(selection)
+	c.Talents = append(c.Talents, c.Profession.BenifitDefinitions().TalentPool[parsed])
 
-	fmt.Printf("\nstep #6: drive\n")
+	fmt.Printf("\nstep #8: drive\n")
 	for i := 0; i <= 11; i++ {
 		fmt.Printf("[%v]: %s\n", i, Drive(i).String())
 	}
@@ -241,7 +255,7 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	parsed, _ = strconv.Atoi(selection)
 	c.Drive = Drive(parsed)
 
-	fmt.Printf("\nstep #7: drive talent\n")
+	fmt.Printf("\nstep #9: drive talent\n")
 	for i, talent := range c.Drive.Talents() {
 		fmt.Printf("[%v]: %s\n", i, talent.String())
 	}

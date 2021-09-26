@@ -788,35 +788,87 @@ func (p Profession) BenifitDefinitions() BenifitDefinition {
 			TalentPool: []Talent{Expertise, KnowItAll},
 		}
 	case Explorer:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  Perception.Focus(),
+			TalentPool: []Talent{PilotTalent, Scouting},
+		}
 	case Fixer:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Bargaining, Evaluation},
+			TalentPool: []Talent{Fringer, Improvisation},
+		}
 	case Investigator:
-		return BenifitDefinition{}
+		pool := Perception.Focus()
+		pool = append(pool, Investigation)
+		return BenifitDefinition{
+			FocusPool: pool,
+		}
 	case Merchant:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Bargaining, Business},
+			TalentPool: []Talent{Affluent, Contacts},
+		}
 	case Negotiator:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Bargaining, Persuasion, Empathy},
+			TalentPool: []Talent{Intrigue, Oratory},
+		}
 	case Pilot:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Piloting},
+			TalentPool: []Talent{PilotTalent},
+		}
 	case Politician:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Deception, Persuasion, CurrentAffairs, Law},
+			TalentPool: []Talent{Contacts, Oratory},
+		}
 	case Professional:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Bargaining, Expression, Business, Technology, Research},
+			TalentPool: []Talent{Affluent, Expertise},
+		}
 	case Scavenger:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Technology, Searching},
+			TalentPool: []Talent{Improvisation, Maker},
+		}
 	case Scholar:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  Intelligence.Focus(),
+			TalentPool: []Talent{Expertise, Knowledge},
+		}
 	case Security:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool: []Focus{SecurityFocus, Empathy, Intuition, Seeing},
+			TalentPool: []Talent{
+				DualWeaponStyle, GrapplingStyle, OverwhelmStyle,
+				PistolStyle, RifleStyle, SelfDefenseStyle,
+				SingleWeaponStyle, StrikingStyle, ThrownWeaponStyle,
+			},
+		}
 	case Socialite:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Etiquette, Seduction},
+			TalentPool: []Talent{Attractive, Contacts},
+		}
 	case Soldier:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool: []Focus{Pistols, Rifles, Brawling},
+			TalentPool: []Talent{TacticalAwareness, DualWeaponStyle, GrapplingStyle, OverwhelmStyle,
+				PistolStyle, RifleStyle, SelfDefenseStyle,
+				SingleWeaponStyle, StrikingStyle, ThrownWeaponStyle},
+		}
 	case Survivalist:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Bows, Pistols},
+			TalentPool: []Talent{Fringer, TacticalAwareness},
+		}
 	case Technician:
-		return BenifitDefinition{}
+		return BenifitDefinition{
+			FocusPool:  []Focus{Engineering, Technology},
+			TalentPool: []Talent{Expertise, Hacking, Maker},
+		}
 	}
 	return BenifitDefinition{}
 }
