@@ -147,7 +147,6 @@ func pointBuyPrompt(cmd *cobra.Command, args []string) map[Ability]int {
 		total = total - parsed
 	}
 
-	fmt.Printf("abilities:%+v\n", out)
 	return out
 }
 
@@ -182,6 +181,10 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 		Fortune: 15,
 	}
 	fmt.Printf("beginning character wizard\n")
+	var name string
+	fmt.Printf("whats your characters name?\n")
+	fmt.Scan(&name)
+	c.Name = name
 	fmt.Printf("\nstep #1: origin\n")
 	fmt.Printf("[%v]:%s, [%v]:%s, [%v]:%s\n", 0, Origin(0).String(), 1, Origin(1).String(), 2, Origin(2).String())
 	fmt.Scan(&selection)
