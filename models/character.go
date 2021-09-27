@@ -51,7 +51,7 @@ func (c Character) CLIOutput() string {
 	}
 	outbuf.WriteString("\nabilities:\n")
 	for ability, val := range c.Abilities {
-		if ability == c.Background.BenifitDefinitions().Ability {
+		if ability == c.Background.BenefitDefinitions().Ability {
 			outbuf.WriteString(fmt.Sprintf("-%s: %v + 1 (%v) *%s\n", ability.String(), val, AbilityScoreModifier(val+1), c.Background.String()))
 		} else {
 			outbuf.WriteString(fmt.Sprintf("-%s: %v (%v)\n", ability.String(), val, AbilityScoreModifier(val)))
@@ -73,14 +73,14 @@ func (c *Character) GenerateCharacter(cmd *cobra.Command, args []string) {
 	profession := Profession(utils.Rand(23, 0))
 	background := Background(utils.Rand(11, 0))
 	focus := []Focus{
-		background.BenifitDefinitions().FocusPool[utils.Rand(len(background.BenifitDefinitions().FocusPool), 0)],
-		profession.BenifitDefinitions().FocusPool[utils.Rand(len(profession.BenifitDefinitions().FocusPool), 0)],
+		background.BenefitDefinitions().FocusPool[utils.Rand(len(background.BenefitDefinitions().FocusPool), 0)],
+		profession.BenefitDefinitions().FocusPool[utils.Rand(len(profession.BenefitDefinitions().FocusPool), 0)],
 	}
 
 	drive := Drive(utils.Rand(11, 0))
 	talents := []Talent{
-		background.BenifitDefinitions().TalentPool[utils.Rand(len(background.BenifitDefinitions().TalentPool), 0)],
-		profession.BenifitDefinitions().TalentPool[utils.Rand(len(profession.BenifitDefinitions().TalentPool), 0)],
+		background.BenefitDefinitions().TalentPool[utils.Rand(len(background.BenefitDefinitions().TalentPool), 0)],
+		profession.BenefitDefinitions().TalentPool[utils.Rand(len(profession.BenefitDefinitions().TalentPool), 0)],
 		drive.Talents()[utils.Rand(len(drive.Talents()), 0)],
 	}
 	fortune := 15
@@ -208,22 +208,22 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	parsed, _ = strconv.Atoi(selection)
 	c.Background = Background(parsed)
 
-	fmt.Print("\nbackground benifits\n")
-	fmt.Printf("ability: %s + %v\n", c.Background.BenifitDefinitions().Ability.String(), c.Background.BenifitDefinitions().AbilityModifier)
+	fmt.Print("\nbackground Benefits\n")
+	fmt.Printf("ability: %s + %v\n", c.Background.BenefitDefinitions().Ability.String(), c.Background.BenefitDefinitions().AbilityModifier)
 	fmt.Printf("\nstep #3: background focus\n")
-	for i, bkgrnd := range c.Background.BenifitDefinitions().FocusPool {
+	for i, bkgrnd := range c.Background.BenefitDefinitions().FocusPool {
 		fmt.Printf("[%v]: %s\n", i, bkgrnd)
 	}
 	fmt.Scan(&selection)
 	parsed, _ = strconv.Atoi(selection)
-	c.Focus = []Focus{c.Background.BenifitDefinitions().FocusPool[parsed]}
+	c.Focus = []Focus{c.Background.BenefitDefinitions().FocusPool[parsed]}
 	fmt.Printf("\nstep #4: background talent\n")
-	for i, talent := range c.Background.BenifitDefinitions().TalentPool {
+	for i, talent := range c.Background.BenefitDefinitions().TalentPool {
 		fmt.Printf("[%v]: %s\n", i, talent)
 	}
 	fmt.Scan(&selection)
 	parsed, _ = strconv.Atoi(selection)
-	c.Talents = []Talent{c.Background.BenifitDefinitions().TalentPool[parsed]}
+	c.Talents = []Talent{c.Background.BenefitDefinitions().TalentPool[parsed]}
 
 	fmt.Printf("\nstep #5: profession\n")
 	for i := 0; i <= 23; i++ {
@@ -235,19 +235,19 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	c.SocialClass = c.Profession.SocialClass()
 	fmt.Printf("socal class (derived from profession): %s\n", c.Profession.SocialClass().String())
 	fmt.Print("\nstep #6: profession focus\n")
-	for i, focus := range c.Profession.BenifitDefinitions().FocusPool {
+	for i, focus := range c.Profession.BenefitDefinitions().FocusPool {
 		fmt.Printf("[%v]: %s\n", i, focus.String())
 	}
 	fmt.Scan(&selection)
 	parsed, _ = strconv.Atoi(selection)
-	c.Focus = append(c.Focus, c.Profession.BenifitDefinitions().FocusPool[parsed])
+	c.Focus = append(c.Focus, c.Profession.BenefitDefinitions().FocusPool[parsed])
 	fmt.Printf("\nstep #7: profession talent\n")
-	for i, talent := range c.Profession.BenifitDefinitions().TalentPool {
+	for i, talent := range c.Profession.BenefitDefinitions().TalentPool {
 		fmt.Printf("[%v]: %s\n", i, talent.String())
 	}
 	fmt.Scan(&selection)
 	parsed, _ = strconv.Atoi(selection)
-	c.Talents = append(c.Talents, c.Profession.BenifitDefinitions().TalentPool[parsed])
+	c.Talents = append(c.Talents, c.Profession.BenefitDefinitions().TalentPool[parsed])
 
 	fmt.Printf("\nstep #8: drive\n")
 	for i := 0; i <= 11; i++ {
@@ -267,6 +267,7 @@ func (c *Character) Wizard(cmd *cobra.Command, args []string) {
 	fmt.Printf("\n\ncharacter: %+v\n", c.CLIOutput())
 	root := viper.GetString("data.root")
 	characters := viper.GetString("data.characters")
+	fmt.Printf("\nsaving to %s%s%s.json\n", root, characters, c.Name)
 	file, err := os.OpenFile(fmt.Sprintf("%s%s%s.json", root, characters, c.Name), os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		fmt.Printf("\nerror:%s\n", err)

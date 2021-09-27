@@ -345,7 +345,7 @@ func (s SocialClass) IncomeScore() int {
 	return 0
 }
 
-type BenifitDefinition struct {
+type BenefitDefinition struct {
 	Background      Background `json:"background"`
 	Ability         Ability    `json:"ability"`
 	AbilityModifier int        `json:"ability_mod"`
@@ -353,7 +353,7 @@ type BenifitDefinition struct {
 	TalentPool      []Talent   `json:"talent_pool"`
 }
 
-type Benifit struct {
+type Benefit struct {
 	Name   string `json:"name"`
 	Focus  Focus  `json:"focus"`
 	Talent Talent `json:"talent"`
@@ -740,106 +740,111 @@ func (a Ability) Focus() []Focus {
 	}
 	return []Focus{}
 }
-func (p Profession) BenifitDefinitions() BenifitDefinition {
+func (p Profession) BenefitDefinitions() BenefitDefinition {
 	switch p {
 	case Artist:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Expression, Art},
 			TalentPool: []Talent{Artistry, Performance},
 		}
 	case Athlete:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Running, Swimming, Acrobatics, FreeFall, Climbing, Jumping},
 			TalentPool: []Talent{Agility, QuickReflexes},
 		}
 	case Brawler:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Brawling, Grappling},
 			TalentPool: []Talent{GrapplingStyle, StrikingStyle},
 		}
 	case Clergy:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Faith, Theology},
 			TalentPool: []Talent{Inspire, Oratory},
 		}
 	case Commander:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Leadership, Tactics},
 			TalentPool: []Talent{Command, TacticalAwareness},
 		}
 	case Criminal:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Deception, SleightOfHand, Stealth},
 			TalentPool: []Talent{Burglary, Scouting},
 		}
 	case Dilettante:
-		return BenifitDefinition{
-			FocusPool:  Perception.Focus(),
+		pool := Perception.Focus()
+		pool = append(pool, Research)
+		return BenefitDefinition{
+			FocusPool:  pool,
 			TalentPool: []Talent{Improvisation, KnowItAll},
 		}
 	case Executive:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Leadership, Business},
 			TalentPool: []Talent{Command, Intrigue},
 		}
 	case Expert:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  Intelligence.Focus(),
 			TalentPool: []Talent{Expertise, KnowItAll},
 		}
 	case Explorer:
-		return BenifitDefinition{
-			FocusPool:  Perception.Focus(),
+		pool := Perception.Focus()
+		pool = append(pool, Navigation)
+		return BenefitDefinition{
+			FocusPool:  pool,
 			TalentPool: []Talent{PilotTalent, Scouting},
 		}
 	case Fixer:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Bargaining, Evaluation},
 			TalentPool: []Talent{Fringer, Improvisation},
 		}
 	case Investigator:
 		pool := Perception.Focus()
 		pool = append(pool, Investigation)
-		return BenifitDefinition{
-			FocusPool: pool,
+		return BenefitDefinition{
+			FocusPool:  pool,
+			TalentPool: []Talent{Intrigue, Observation},
 		}
 	case Merchant:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Bargaining, Business},
 			TalentPool: []Talent{Affluent, Contacts},
 		}
 	case Negotiator:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Bargaining, Persuasion, Empathy},
 			TalentPool: []Talent{Intrigue, Oratory},
 		}
 	case Pilot:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Piloting},
 			TalentPool: []Talent{PilotTalent},
 		}
 	case Politician:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Deception, Persuasion, CurrentAffairs, Law},
 			TalentPool: []Talent{Contacts, Oratory},
 		}
 	case Professional:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Bargaining, Expression, Business, Technology, Research},
 			TalentPool: []Talent{Affluent, Expertise},
 		}
 	case Scavenger:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Technology, Searching},
 			TalentPool: []Talent{Improvisation, Maker},
 		}
 	case Scholar:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  Intelligence.Focus(),
 			TalentPool: []Talent{Expertise, Knowledge},
 		}
 	case Security:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool: []Focus{SecurityFocus, Empathy, Intuition, Seeing},
 			TalentPool: []Talent{
 				DualWeaponStyle, GrapplingStyle, OverwhelmStyle,
@@ -848,35 +853,35 @@ func (p Profession) BenifitDefinitions() BenifitDefinition {
 			},
 		}
 	case Socialite:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Etiquette, Seduction},
 			TalentPool: []Talent{Attractive, Contacts},
 		}
 	case Soldier:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool: []Focus{Pistols, Rifles, Brawling},
 			TalentPool: []Talent{TacticalAwareness, DualWeaponStyle, GrapplingStyle, OverwhelmStyle,
 				PistolStyle, RifleStyle, SelfDefenseStyle,
 				SingleWeaponStyle, StrikingStyle, ThrownWeaponStyle},
 		}
 	case Survivalist:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Bows, Pistols},
 			TalentPool: []Talent{Fringer, TacticalAwareness},
 		}
 	case Technician:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			FocusPool:  []Focus{Engineering, Technology},
 			TalentPool: []Talent{Expertise, Hacking, Maker},
 		}
 	}
-	return BenifitDefinition{}
+	return BenefitDefinition{}
 }
 
-func (b Background) BenifitDefinitions() BenifitDefinition {
+func (b Background) BenefitDefinitions() BenefitDefinition {
 	switch b {
 	case Academic:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Academic,
 			Ability:         Intelligence,
 			AbilityModifier: 1,
@@ -884,7 +889,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Knowledge, Linguistics},
 		}
 	case Aristocratic:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Aristocratic,
 			Ability:         Communication,
 			AbilityModifier: 1,
@@ -892,15 +897,17 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Affluent, Contacts},
 		}
 	case Bohemian:
-		return BenifitDefinition{
+		pool := Intelligence.Focus()
+		pool = append(pool, Performing)
+		return BenefitDefinition{
 			Background:      Bohemian,
 			Ability:         Communication,
 			AbilityModifier: 1,
-			FocusPool:       Intelligence.Focus(),
+			FocusPool:       pool,
 			TalentPool:      []Talent{Affluent, Contacts},
 		}
 	case Corporate:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Corporate,
 			Ability:         Communication,
 			AbilityModifier: 1,
@@ -908,7 +915,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Contacts, Intrigue},
 		}
 	case Cosmopolitan:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Cosmopolitan,
 			Ability:         Perception,
 			AbilityModifier: 1,
@@ -916,7 +923,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Knowledge, Observation},
 		}
 	case Exile:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Exile,
 			Ability:         Constitution,
 			AbilityModifier: 1,
@@ -924,7 +931,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Affluent, Fringer},
 		}
 	case Military:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Military,
 			Ability:         Fighting,
 			AbilityModifier: 1,
@@ -935,7 +942,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			},
 		}
 	case Outcast:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Outcast,
 			Ability:         Perception,
 			AbilityModifier: 1,
@@ -943,7 +950,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Fringer, Misdirection},
 		}
 	case Laborer:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Laborer,
 			Ability:         Constitution,
 			AbilityModifier: 1,
@@ -951,7 +958,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{GrapplingStyle, SelfDefenseStyle, StrikingStyle, TwoHandedStyle, Carousing},
 		}
 	case Suburban:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Suburban,
 			Ability:         Communication,
 			AbilityModifier: 1,
@@ -959,7 +966,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Affluent, Contacts},
 		}
 	case Trade:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Trade,
 			Ability:         Dexterity,
 			AbilityModifier: 1,
@@ -967,7 +974,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Improvisation, Maker},
 		}
 	case Urban:
-		return BenifitDefinition{
+		return BenefitDefinition{
 			Background:      Urban,
 			Ability:         Dexterity,
 			AbilityModifier: 1,
@@ -975,7 +982,7 @@ func (b Background) BenifitDefinitions() BenifitDefinition {
 			TalentPool:      []Talent{Agility, Misdirection},
 		}
 	}
-	return BenifitDefinition{}
+	return BenefitDefinition{}
 }
 
 func (b Background) String() string {
