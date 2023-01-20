@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,12 @@ limitations under the License.
 package cmd
 
 import (
-	"exp/models"
 	"fmt"
 
 	"github.com/spf13/cobra"
+
+	"github.com/caleb-noodahl/expanse-cli/engine"
+	"github.com/caleb-noodahl/expanse-cli/models"
 )
 
 // charCmd represents the char command
@@ -37,9 +39,9 @@ var charCmd = &cobra.Command{
 		}
 		switch action {
 		case "gen":
-			character.GenerateCharacter(cmd, args)
+			engine.GenerateCharacter(cmd, args)
 		case "wiz":
-			character.Wizard(cmd, args)
+			engine.CharacterWizard(cmd, args)
 		case "load":
 			character.LoadCharacter(cmd, args)
 		case "update":
