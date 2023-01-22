@@ -65,6 +65,9 @@ const (
 	Perception
 	Strength
 	Willpower
+	Defense
+	Speed
+	Toughness
 )
 
 const (
@@ -126,6 +129,38 @@ const (
 	SocaliteSpecialization
 	StarSpecialization
 )
+
+func (s Specialization) String() string {
+	switch s {
+	case AcademicSpecialization:
+		return "academic"
+	case AceSpecialization:
+		return "ace"
+	case AgentSpecialization:
+		return "agent"
+	case CommandoSpecialization:
+		return "commando"
+	case ExecutiveSpecialization:
+		return "executive"
+	case GunfighterSpecialization:
+		return "gunfighter"
+	case HackerSpecialization:
+		return "hacker"
+	case InvestigatorSpecialization:
+		return "investor"
+	case MartialSpecialization:
+		return "martial"
+	case ArtistSpecialization:
+		return "artisitc"
+	case SniperSpecialization:
+		return "sniper"
+	case SocaliteSpecialization:
+		return "socialite"
+	case StarSpecialization:
+		return "star"
+	}
+	return ""
+}
 
 const (
 	Brawler Profession = iota
@@ -696,6 +731,12 @@ func (a Ability) String() string {
 		return "strength"
 	case Willpower:
 		return "willpower"
+	case Defense:
+		return "defense"
+	case Toughness:
+		return "toughness"
+	case Speed:
+		return "speed"
 	}
 	return ""
 }

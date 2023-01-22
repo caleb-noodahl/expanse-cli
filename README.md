@@ -17,7 +17,7 @@ cd expanse-cli
 go build
 
 # have fun!
-exp.exe roll        
+expanse-cli.exe roll        
 > 1d6: 4
 ```
 
@@ -33,7 +33,7 @@ a level 1 character is generated and it's character sheet is displayed along wit
 
 ```bash
 # generate a new character
-exp.exe char --a=gen
+expanse-cli.exe char --a=gen
 
 >character:
 name:         6f273a65-85ac-46bd-a747-ab26938bd3ac
@@ -80,7 +80,7 @@ walks the user through character creation wizard.
 choices can be selected by sending their corresponding index, eg. `[0], [1], [2]...`
 
 ```bash
-exp.exe char --a=wiz
+expanse-cli.exe char --a=wiz
 beginning character wizard
 
 step #1: origin
